@@ -1,4 +1,4 @@
-const INITIAL_AMOUNT_OF_BALLS = 10;
+const INITIAL_AMOUNT_OF_BALLS = 30;
 const MIN_BALL_VELOCITY = -10;
 const MAX_BALL_VELOCITY = 10;
 const MIN_BALL_SIZE = 10;
@@ -24,6 +24,9 @@ function Ball(x, y, velocityX, velocityY, color, size) {
   this.velocityY = velocityY;
   this.color = color;
   this.size = size;
+
+  // debounce fixes bug where balls get stuck in 1 spot
+  this.debounce = false;
 }
 
 Ball.prototype.draw = function() {
@@ -35,26 +38,26 @@ Ball.prototype.draw = function() {
 
 Ball.prototype.update = function() {
   if ((this.x + this.size) >= width) {
-    this.velocityX =- (this.velocityX);
+    this.velocityX = -(this.velocityX);
   }
 
   if ((this.x - this.size) <= 0) {
-    this.velocityX =- (this.velocityX);
+    this.velocityX = -(this.velocityX);
   }
 
   if ((this.y + this.size) >= height) {
-    this.velocityY =- (this.velocityY);
+    this.velocityY = -(this.velocityY);
   }
 
   if ((this.y - this.size) <= 0) {
-    this.velocityY =- (this.velocityY);
+    this.velocityY = -(this.velocityY);
   }
 
   this.x += this.velocityX;
   this.y += this.velocityY
 }
 
-Ball.prototype.detetctCollision = function() {
+Ball.prototype.detectCollision = function() {
   for (let j = 0; j < balls.length; j++) {
     if (!(this === balls[j])) {
       const dx = this.x - balls[j].x;
@@ -62,11 +65,24 @@ Ball.prototype.detetctCollision = function() {
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < this.size + balls[j].size) {
-        balls[j].color = this.color = "rgb(" + random(0, 255) + "," + random(0, 255) + "," + random(0, 255) + ")";
+        if (balls[j].debounce == false) {
+          balls[j].debounce = true
+
+          balls[j].velocityX = -(balls[j].velocityX)
+          balls[j].velocityY = -(balls[j].velocityY)
+
+          setTimeout(() => {
+            balls[j].debounce = false
+          }, 250);
+        }
+       
+        // balls[j].color = this.color = "rgb(" + random(0, 255) + "," + random(0, 255) + "," + random(0, 255) + ")";
       }
     }
   }
 }
+
+let balls = [];
 
 function createBall() {
   let size = random(MIN_BALL_SIZE, MAX_BALL_SIZE);
@@ -83,8 +99,6 @@ function createBall() {
 
   balls.push(ball);
 }
-
-let balls = [];
 
 // Spawn in initial amount of balls
 while (balls.length < INITIAL_AMOUNT_OF_BALLS) {
@@ -103,7 +117,7 @@ function loop() {
   for (let i = 0; i < balls.length; i++) {
     balls[i].draw();
     balls[i].update();
-    balls[i].detetctCollision();
+    balls[i].detectCollision();
   }
 
   requestAnimationFrame(loop);
