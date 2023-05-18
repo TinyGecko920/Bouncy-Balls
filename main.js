@@ -1,19 +1,16 @@
-const AMOUNT_OF_BALLS = 50;
+const INITIAL_AMOUNT_OF_BALLS = 10;
 const MIN_BALL_VELOCITY = -10;
 const MAX_BALL_VELOCITY = 10;
 const MIN_BALL_SIZE = 10;
 const MAX_BALL_SIZE = 30;
 
 // setup canvas
-
 const canvas = document.querySelector("canvas");
 const context = canvas.getContext("2d");
-
 const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
 
 // function to generate random number
-
 function random(min, max) {
   const num = Math.floor(Math.random() * (max - min + 1)) + min;
   return num;
@@ -71,8 +68,7 @@ Ball.prototype.detetctCollision = function() {
   }
 }
 
-let balls = [];
-while (balls.length < AMOUNT_OF_BALLS) {
+function createBall() {
   let size = random(MIN_BALL_SIZE, MAX_BALL_SIZE);
   let ball = new Ball(
     // ball position always drawn at least one ball width
@@ -87,6 +83,18 @@ while (balls.length < AMOUNT_OF_BALLS) {
 
   balls.push(ball);
 }
+
+let balls = [];
+
+// Spawn in initial amount of balls
+while (balls.length < INITIAL_AMOUNT_OF_BALLS) {
+  createBall();
+}
+
+// Create a new ball when clicking
+window.addEventListener("click", function() {
+  createBall();
+})
 
 function loop() {
   context.fillStyle = "rgba(0, 0, 0, 0.25)";
