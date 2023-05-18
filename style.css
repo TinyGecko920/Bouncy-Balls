@@ -12,14 +12,21 @@ body {
   height: inherit;
 }
 
-h1 {
+h1, #ball-count {
   font-size: 2rem;
   letter-spacing: -1px;
   position: absolute;
   margin: 0;
   top: 8px;
-  right: 16px;
 
   color: transparent;
   text-shadow: 0 0 4px white;
+}
+
+h1 {
+  right: 16px;
+}
+
+#ball-count {
+  left: 16px;
 }

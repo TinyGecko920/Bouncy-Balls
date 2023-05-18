@@ -6,6 +6,7 @@ const MAX_BALL_SIZE = 30;
 
 // setup canvas
 const canvas = document.querySelector("canvas");
+const ballCount = document.querySelector("#ball-count")
 const context = canvas.getContext("2d");
 const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
@@ -84,6 +85,10 @@ Ball.prototype.detectCollision = function() {
 
 let balls = [];
 
+function updateBallCount() {
+  ballCount.innerHTML = balls.length + " Balls"
+}
+
 function createBall() {
   let size = random(MIN_BALL_SIZE, MAX_BALL_SIZE);
   let ball = new Ball(
@@ -118,6 +123,7 @@ function loop() {
     balls[i].draw();
     balls[i].update();
     balls[i].detectCollision();
+    updateBallCount();
   }
 
   requestAnimationFrame(loop);
