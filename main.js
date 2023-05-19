@@ -175,7 +175,7 @@ amountOfBallsSlider.oninput = function () {
   }
 
   // create more balls
-  while (balls.length < this.value) {
+  while (balls.length < max_amount_of_balls) {
     createBall();
   }
 };
@@ -187,7 +187,7 @@ maxBallsSlider.oninput = function () {
   if (this.value < amount_of_balls) {
     amount_of_balls = this.value
     amountOfBalls.innerHTML = "Amount of Balls: " + this.value;
-    amountOfBalls.value = this.value
+    amountOfBallsSlider.value = this.value
   }
 
   // clean up extra balls
